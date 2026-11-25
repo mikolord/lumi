@@ -1,7 +1,7 @@
 {
-  "versionCode": 16,
-  "versionName": "0.7.3",
-  "url": "https://github.com/mikolord/lumi/releases/download/tv-v0.7.3/lumi-tv-0.7.3.apk",
-  "sha256": "30c168d60d2f37ec198cfa350cbf4785fc79912e6e07bf154a4d24f55eeeca0c",
-  "notes": "Плитка для Huawei Vision S и прямые обновления из публичного GitHub"
+  "versionCode": 17,
+  "versionName": "0.7.4",
+  "url": "https://github.com/mikolord/lumi/releases/download/tv-v0.7.4/lumi-tv-0.7.4.apk",
+  "sha256": "8b5b8354de06a761b0f51ddf56be540d647ec59b76dbb9f309e06916d50dc0bc",
+  "notes": "Исправлена карточка приложения на главном экране Huawei Vision S"
 }
