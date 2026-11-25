@@ -11,8 +11,8 @@ android {
         applicationId = "club.netcraze.lumi"
         minSdk = 26
         targetSdk = 34
-        versionCode = 16
-        versionName = "0.7.3"
+        versionCode = 17
+        versionName = "0.7.4"
     }
 
     buildTypes {

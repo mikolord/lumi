@@ -7,7 +7,7 @@
 | Платформа | Установка |
 | --- | --- |
 | Сервер | Docker Compose — инструкция ниже |
-| Android TV / Huawei Vision S | [Скачать APK 0.7.3](https://github.com/mikolord/lumi/releases/download/tv-v0.7.3/lumi-tv-0.7.3.apk) |
+| Android TV / Huawei Vision S | [Скачать APK 0.7.4](https://github.com/mikolord/lumi/releases/download/tv-v0.7.4/lumi-tv-0.7.4.apk) |
 | Телефон / компьютер | Открой свой сервер в браузере; можно установить как PWA |
 | iOS | Отдельное приложение готовится. Пока доступна PWA через Safari |
 

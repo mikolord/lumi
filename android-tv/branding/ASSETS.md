@@ -22,3 +22,5 @@ Edit this existing Lumi app launcher icon. Preserve the recognizable exact gloss
 0.7.2: the same approved full-bleed banner is also exported to mipmap-*/lumi_tv_banner.png and mipmap-nodpi/lumi_tv_banner.png. The manifest uses these resources on the application, MainActivity and a new LumiTvLauncher activity-alias, so launcher artwork is rediscovered after upgrade. No new artwork was generated.
 
 0.7.3: export the approved banner at 496x280 as drawable/lumi_vision_tile.png. Per Huawei Vision S integration guidance, the real launcher MainActivity uses it for icon, banner and logo with CATEGORY_LAUNCHER; application/settings keep the square icon. Reference: https://forums.developer.huawei.com/forumPortal/en/topic/0202585440415910074 . No new artwork was generated.
+
+0.7.4: drawable/lumi_launcher_card.png reuses the same 496x280 image. Application and MainActivity now both reference it as icon, logo and banner. The application no longer exposes the square adaptive icon as a competing launcher source. APK verification checks application/normal/Leanback launcher icon selection and actual PNG dimensions.

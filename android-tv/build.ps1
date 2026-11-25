@@ -15,6 +15,7 @@ try {
     $taskMetadata = Get-Content 'app/build/outputs/apk/debug/output-metadata.json' | ConvertFrom-Json
     if ($taskMetadata.applicationId -ne 'club.netcraze.lumi') { throw 'Unexpected package identity' }
     $taskVersion = $taskMetadata.elements[0]
+    & (Join-Path $taskRoot 'release/Test-Launcher.ps1') -Apk $taskApk
     $taskFeed = Join-Path $taskRoot 'release/tv'
     New-Item -ItemType Directory -Path $taskFeed -Force | Out-Null
     $taskPrevious = Join-Path $taskFeed 'rc-foto.apk'
@@ -28,7 +29,7 @@ try {
     $taskHash = (Get-FileHash -LiteralPath $taskApk -Algorithm SHA256).Hash.ToLowerInvariant()
     $taskImmutableName = "lumi-$($taskVersion.versionCode)-$taskHash.apk"
     Copy-Item -LiteralPath $taskApk -Destination (Join-Path $taskFeed $taskImmutableName) -Force
-    $taskInfo = [ordered]@{versionCode=$taskVersion.versionCode;versionName=$taskVersion.versionName;url="/tv/$taskImmutableName";sha256=$taskHash;notes='Плитка для Huawei Vision S и прямые обновления из публичного GitHub'}
+    $taskInfo = [ordered]@{versionCode=$taskVersion.versionCode;versionName=$taskVersion.versionName;url="/tv/$taskImmutableName";sha256=$taskHash;notes='Исправлена карточка приложения на главном экране Huawei Vision S'}
     $taskJson = $taskInfo | ConvertTo-Json
     [IO.File]::WriteAllText((Join-Path $taskFeed 'version.json.new'), $taskJson, [Text.UTF8Encoding]::new($false))
     Move-Item -LiteralPath (Join-Path $taskFeed 'version.json.new') -Destination (Join-Path $taskFeed 'version.json') -Force

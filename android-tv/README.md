@@ -2,7 +2,7 @@
 
 Нативный клиент личной фототеки. Для просмотра нужен установленный сервер Lumi в Docker: [инструкция](../README.md).
 
-[Скачать APK](https://github.com/mikolord/lumi/releases/download/tv-v0.7.3/lumi-tv-0.7.3.apk) · [Все выпуски](https://github.com/mikolord/lumi/releases)
+[Скачать APK](https://github.com/mikolord/lumi/releases/download/tv-v0.7.4/lumi-tv-0.7.4.apk) · [Все выпуски](https://github.com/mikolord/lumi/releases)
 
 ## Возможности
 
@@ -20,4 +20,4 @@
 
 ## Плитка Huawei Vision S
 
-Запускаемая MainActivity объявляет широкую картинку 496×280 как `icon`, `banner` и `logo`, одновременно с CATEGORY_LAUNCHER и CATEGORY_LEANBACK_LAUNCHER. Это следует примеру Huawei Vision S: https://forums.developer.huawei.com/forumPortal/en/topic/0202585440415910074 . Обычная квадратная иконка приложения сохранена для системных экранов.
+Запускаемая MainActivity объявляет широкую картинку 496×280 как `icon`, `banner` и `logo`, одновременно с CATEGORY_LAUNCHER и CATEGORY_LEANBACK_LAUNCHER. Это следует примеру Huawei Vision S: https://forums.developer.huawei.com/forumPortal/en/topic/0202585440415910074 . В 0.7.4 одна широкая карточка назначена также на уровне application: icon, banner и logo. Это исключает выбор квадратной иконки приложения вместо карточки запускаемого экрана. Сборка проверяет готовый APK скриптом release/Test-Launcher.ps1.
