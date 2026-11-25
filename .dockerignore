@@ -1,0 +1,11 @@
+data/
+import/
+private/
+tests/
+**/__pycache__/
+.git/
+*.tar.gz
+*.sqlite3*
+.env
+
+android-tv/

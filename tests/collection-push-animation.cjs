@@ -1,0 +1,12 @@
+const fs=require('fs'),assert=require('assert'),path=require('path');
+const js=fs.readFileSync(path.join(__dirname,'../app.js'),'utf8');
+const css=fs.readFileSync(path.join(__dirname,'../style.css'),'utf8');
+assert(js.includes("panel.animate(opening?[{transform:'translateX(100%)'}"),'opened collection slides in from the right edge');
+assert(js.includes("{transform:'translateX(0)'},{transform:'translateX(100%)'}"),'closing collection slides back to the right edge');
+assert(js.includes("translateX(-18%)"),'collections list recedes during the push');
+assert(js.includes("opacity:.56"),'collections list dims during the push');
+assert(js.includes("dur=reduce?1:opening?430:380"),'push uses short iOS-like timing');
+assert(!js.includes('clipPath:`inset(${iy}px'),'old rubber cover expansion is removed');
+assert(!css.includes('.album-cover{'),'old cover overlay CSS is removed');
+assert(css.includes('box-shadow:-24px 0 60px'),'pushed collection casts a subtle navigation shadow');
+console.log('Collections use an iOS push transition for open and close');

@@ -1,0 +1,40 @@
+services:
+  photos:
+    build: .
+    image: lumi-server:local
+    container_name: lumi
+    restart: unless-stopped
+    ports:
+      - "${PHOTO_BIND:-0.0.0.0}:${PHOTO_PORT:-8098}:8000"
+    volumes:
+      - ${PHOTO_DATA_PATH:-./data}:/data
+      - ${PHOTO_IMPORT_PATH:-./import}:/sources/import:ro
+    depends_on:
+      face-worker:
+        condition: service_healthy
+    networks: [default, faces]
+    environment:
+      PHOTO_DATA_DIR: /data
+      PHOTO_ORIGIN: ${PHOTO_ORIGIN:-http://localhost:8098}
+      PHOTO_LAN_ORIGIN: ${PHOTO_LAN_ORIGIN:-}
+      PHOTO_SOURCES: '{"Импорт":"/sources/import"}'
+      PHOTO_UPDATE_REPO: ${PHOTO_UPDATE_REPO:-mikolord/lumi}
+      PHOTO_GITHUB_TOKEN: ${PHOTO_GITHUB_TOKEN:-}
+      PHOTO_FACE_URL: http://face-worker:8001
+      PHOTO_FACE_TOKEN: ${PHOTO_FACE_TOKEN:?Set PHOTO_FACE_TOKEN to a random secret of at least 32 characters}
+  face-worker:
+    build: ./faces
+    image: lumi-faces:local
+    restart: unless-stopped
+    networks: [faces]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 1g
+    cpus: 0.8
+    environment:
+      PHOTO_FACE_TOKEN: ${PHOTO_FACE_TOKEN}
+networks:
+  faces:
+    internal: true

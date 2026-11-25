@@ -1,0 +1,12 @@
+.gradle/
+.kotlin/
+.android-build/
+**/build/
+local.properties
+*.apk
+*.keystore
+*.jks
+photo-tv-backups/
+release/*.log
+
+__pycache__/

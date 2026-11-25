@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="48dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/connect_title"
+            android:textColor="@color/text"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/connect_subtitle"
+            android:textColor="@color/text_dim"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/inputServer"
+            android:layout_width="560dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:hint="@string/server_hint"
+            android:inputType="textUri"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@+id/buttonScan" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/buttonScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="200dp"
+                android:text="@string/scan_button" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/foundList"
+            android:layout_width="560dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/connect_choose"
+            android:textColor="@color/text_dim"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="14dp">
+
+            <Button
+                android:id="@+id/buttonQr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="240dp"
+                android:text="@string/qr_login_button" />
+
+            <Button
+                android:id="@+id/buttonManual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:minWidth="240dp"
+                android:text="@string/manual_login_button" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/manualBlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/inputLogin"
+                android:layout_width="560dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="@string/login_hint"
+                android:inputType="text"
+                android:imeOptions="actionNext"
+                android:nextFocusDown="@+id/inputPassword" />
+
+            <EditText
+                android:id="@+id/inputPassword"
+                android:layout_width="560dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                android:nextFocusDown="@+id/buttonConnect" />
+
+            <Button
+                android:id="@+id/buttonConnect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:minWidth="240dp"
+                android:text="@string/connect_button" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/error"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/qrImage"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/qr_bg"
+            android:visibility="gone"
+            android:contentDescription="QR" />
+
+        <TextView
+            android:id="@+id/pairCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:letterSpacing="0.2"
+            android:textColor="@color/text"
+            android:textSize="44sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/pairHint"
+            android:layout_width="560dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="@string/pair_hint"
+            android:textColor="@color/text_dim"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </LinearLayout>
+</ScrollView>
