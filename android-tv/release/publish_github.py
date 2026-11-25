@@ -19,14 +19,15 @@ def git(*args, cwd=ROOT):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source-commit', required=True)
+    parser.add_argument('--prerelease', action='store_true', help='Publish a beta APK without changing the stable update feed')
     args = parser.parse_args()
     info = json.loads((ROOT / 'release/tv/version.json').read_text())
     apk = ROOT / 'release/tv/rc-foto.apk'
     data = apk.read_bytes()
     if hashlib.sha256(data).hexdigest() != info['sha256']: raise ValueError('APK checksum mismatch')
     version = info['versionName']
-    tag = 'tv-v' + version
-    name = 'lumi-tv-' + version + '.apk'
+    tag = 'android-v' + version
+    name = 'lumi-android-' + version + '.apk'
     public_info = dict(info, url='https://github.com/' + REPO + '/releases/download/' + tag + '/' + name)
     manifest = (json.dumps(public_info, ensure_ascii=False, indent=2) + '\n').encode()
     result = subprocess.run(['git', 'credential', 'fill'], input='protocol=https\nhost=github.com\n\n',
@@ -44,8 +45,8 @@ def main():
         code = error.code
         error.close()
         if code != 404: raise
-        payload = dict(tag_name=tag, target_commitish=args.source_commit, name='lumi TV ' + version,
-            body=info.get('notes', ''), draft=False, prerelease=False, make_latest='false')
+        payload = dict(tag_name=tag, target_commitish=args.source_commit, name='lumi Android ' + version,
+            body=info.get('notes', ''), draft=False, prerelease=args.prerelease, make_latest='false')
         release = api(base + '/releases', json.dumps(payload, ensure_ascii=False).encode())
     assets = {asset['name']: asset for asset in release['assets']}
     upload = release['upload_url'].split('{', 1)[0]
@@ -56,6 +57,9 @@ def main():
                 raise ValueError('Published asset differs; increment the version instead of replacing it')
             continue
         api(upload + '?name=' + asset_name, contents, content_type)
+    if args.prerelease:
+        print('Published beta (stable feed unchanged):', release['html_url'])
+        return
     remote = 'https://github.com/' + REPO + '.git'
     with tempfile.TemporaryDirectory(prefix='lumi-tv-feed-') as temporary:
         destination = Path(temporary).resolve()

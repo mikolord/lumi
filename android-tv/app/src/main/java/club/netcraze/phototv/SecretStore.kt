@@ -11,9 +11,9 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 /** Account cookies are encrypted with a non-exportable Android Keystore key. */
-internal class SecretStore(context: Context) {
-    private val prefs=context.getSharedPreferences("lumi_secrets",Context.MODE_PRIVATE)
-    private val alias="lumi.session.v1"
+internal class SecretStore(context: Context, name: String = "session") {
+    private val prefs=context.getSharedPreferences(if(name=="session")"lumi_secrets" else "lumi_secrets_$name",Context.MODE_PRIVATE)
+    private val alias="lumi.$name.v1"
     @Synchronized private fun key(): SecretKey {
         val store=KeyStore.getInstance("AndroidKeyStore").apply{load(null)}
         (store.getKey(alias,null) as? SecretKey)?.let{return it}

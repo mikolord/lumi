@@ -11,4 +11,17 @@
         <item name="android:colorControlActivated">@color/accent</item>
         <item name="android:colorControlHighlight">#334F8FF7</item>
     </style>
+    <style name="Theme.Lumi.Mobile" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#000000</item>
+        <item name="android:statusBarColor">#000000</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:colorAccent">#168CFF</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+    <style name="Theme.Lumi.Mobile.Dark" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:colorAccent">#168CFF</item>
+        <item name="android:windowBackground">#111114</item>
+    </style>
 </resources>

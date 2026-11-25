@@ -1,7 +1,7 @@
 {
-  "versionCode": 17,
-  "versionName": "0.7.4",
-  "url": "/tv/lumi-17-8b5b8354de06a761b0f51ddf56be540d647ec59b76dbb9f309e06916d50dc0bc.apk",
-  "sha256": "8b5b8354de06a761b0f51ddf56be540d647ec59b76dbb9f309e06916d50dc0bc",
-  "notes": "Исправлена карточка приложения на главном экране Huawei Vision S"
+  "versionCode": 18,
+  "versionName": "0.8.0-beta1",
+  "url": "/tv/lumi-18-a76e8876afc30393b39b506e8fa165c27f2c2fbb88e316a0e79ecbf01a71491a.apk",
+  "sha256": "a76e8876afc30393b39b506e8fa165c27f2c2fbb88e316a0e79ecbf01a71491a",
+  "notes": "Универсальный Lumi для телефонов, планшетов и ТВ: мобильный интерфейс, фоновая очередь и автозагрузка"
 }

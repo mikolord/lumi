@@ -29,7 +29,7 @@ try {
     $taskHash = (Get-FileHash -LiteralPath $taskApk -Algorithm SHA256).Hash.ToLowerInvariant()
     $taskImmutableName = "lumi-$($taskVersion.versionCode)-$taskHash.apk"
     Copy-Item -LiteralPath $taskApk -Destination (Join-Path $taskFeed $taskImmutableName) -Force
-    $taskInfo = [ordered]@{versionCode=$taskVersion.versionCode;versionName=$taskVersion.versionName;url="/tv/$taskImmutableName";sha256=$taskHash;notes='Исправлена карточка приложения на главном экране Huawei Vision S'}
+    $taskInfo = [ordered]@{versionCode=$taskVersion.versionCode;versionName=$taskVersion.versionName;url="/tv/$taskImmutableName";sha256=$taskHash;notes='Универсальный Lumi для телефонов, планшетов и ТВ: мобильный интерфейс, фоновая очередь и автозагрузка'}
     $taskJson = $taskInfo | ConvertTo-Json
     [IO.File]::WriteAllText((Join-Path $taskFeed 'version.json.new'), $taskJson, [Text.UTF8Encoding]::new($false))
     Move-Item -LiteralPath (Join-Path $taskFeed 'version.json.new') -Destination (Join-Path $taskFeed 'version.json') -Force
