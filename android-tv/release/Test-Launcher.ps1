@@ -7,17 +7,16 @@ $taskApplication = $taskBadging | Where-Object { $_ -match '^application:' }
 $taskLauncher = $taskBadging | Where-Object { $_ -match '^launchable-activity:' }
 $taskLeanback = $taskBadging | Where-Object { $_ -match '^leanback-launchable-activity:' }
 $taskResource = 'res/drawable/lumi_launcher_card.png'
-foreach ($taskEntry in @($taskApplication, $taskLauncher, $taskLeanback)) {
-    if (!$taskEntry -or !$taskEntry.Contains("icon='$taskResource'")) {
-        throw 'Launcher regression: application and both launchers must use the full-size TV card'
-    }
-}
-if (!$taskApplication.Contains("banner='$taskResource'") -or !$taskLeanback.Contains("banner='$taskResource'")) {
-    throw 'Launcher regression: application and TV banner must use the full-size card'
-}
+$taskPlatform = 'res/drawable/lumi_platform_icon.png'
+if (!$taskApplication.Contains("icon='$taskPlatform'") -or !$taskApplication.Contains("banner='$taskResource'")) { throw 'Universal application artwork is missing' }
+if (!$taskLauncher.Contains("icon='$taskPlatform'") -or !$taskLauncher.Contains('LauncherActivity')) { throw 'Adaptive mobile launcher is missing' }
+if (!$taskLeanback.Contains("icon='$taskResource'") -or !$taskLeanback.Contains("banner='$taskResource'") -or !$taskLeanback.Contains('MainActivity')) { throw 'TV launcher artwork is missing' }
+if ($taskBadging | Where-Object { $_ -eq "  uses-feature: name='android.software.leanback'" -or $_ -eq "  uses-feature: name='android.hardware.touchscreen'" }) { throw 'Universal APK must not require TV or touch hardware' }
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $taskZip = [IO.Compression.ZipFile]::OpenRead((Resolve-Path -LiteralPath $Apk).Path)
 try {
+    if (!($taskZip.Entries | Where-Object { $_.FullName.Contains('finger') -and $_.FullName.EndsWith('/lumi_platform_icon.xml') })) { throw 'Touch-device adaptive icon is missing' }
+    if (!($taskZip.Entries | Where-Object { $_.FullName.Contains('television') -and $_.FullName.EndsWith('/lumi_platform_icon.png') })) { throw 'TV device icon is missing' }
     $taskEntry = $taskZip.GetEntry($taskResource)
     if (!$taskEntry) { throw 'TV card image missing from APK' }
     $taskStream = $taskEntry.Open()
@@ -29,4 +28,4 @@ try {
         if ($taskWidth -ne 496 -or $taskHeight -ne 280) { throw 'TV card must be 496x280' }
     } finally { $taskStream.Dispose() }
 } finally { $taskZip.Dispose() }
-Write-Output 'Launcher APK verification passed: application and both launchers use the 496x280 card'
+Write-Output 'Universal APK verified: adaptive touch icon, 496x280 TV art, separate mobile and TV launchers'
