@@ -150,7 +150,7 @@ class PeopleTests(unittest.TestCase):
         self.denied(self.alice,'/api/admin/updates/action',403,dict(action='check'))
         with patch('resource_monitor.snapshot',return_value=dict(cpu=2.5,memory=1024,components=[],cores=4,partial=False)):
             self.assertEqual(self.call(self.admin,'/api/admin/metrics')['cpu'],2.5)
-        info=self.call(self.admin,'/api/admin/updates');self.assertEqual(info['current'],'0.75.7')
+        info=self.call(self.admin,'/api/admin/updates');self.assertEqual(info['current'],(Path(__file__).resolve().parents[1]/'VERSION').read_text().strip())
         self.assertFalse(info['canInstall']);self.assertNotIn('token',json.dumps(info).lower())
 
     @patch.dict('os.environ',{'PHOTO_FACE_URL':'http://fixture:8001','PHOTO_FACE_TOKEN':'a'*48})

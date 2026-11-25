@@ -638,10 +638,6 @@ html[data-theme=dark] .album-popup{color:#f5f5f7;background:rgba(43,43,47,.84);b
 .person-candidate[aria-pressed=true] img{outline:3px solid #168cff;outline-offset:-3px}.person-candidate[aria-pressed=true] strong{color:#168cff}.people-merge-many{overflow-x:auto;justify-content:flex-start;gap:12px}.people-merge-many>div{min-width:110px}
 
 #searchScreen .searchbox~.section-title{padding-top:190px}#searchScreen .empty:not(.hidden){padding:170px 24px 24px}.people-search-results{padding:170px 24px 10px}.searchbox:has(+ .people-search-results:not(.hidden))+.people-search-results{padding-top:170px}.people-search-results h2{font-size:23px;letter-spacing:-.02em}.people-search-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,160px));gap:20px 14px}.people-list-search{display:block;margin:14px 0 18px}.people-sheet .people-list-search input{width:100%}.people-search-results~.empty{padding:24px}.people-search-results:not(.hidden)~.empty{display:none}
-@media(min-width:1000px) and (pointer:fine){
- html,body{background:var(--screen-bg)}.app{max-width:none;width:calc(100% - 216px);margin:0 0 0 216px;min-height:100vh;padding-bottom:60px}.header{padding-left:32px;padding-right:32px}.bottom{position:fixed;left:0;top:0;bottom:0;transform:none;width:216px;padding:28px 14px;display:flex;flex-direction:column;align-items:stretch;gap:14px;background:var(--screen-bg);border-right:1px solid #8883;z-index:9}.bottom>.tabs{max-width:none;width:100%;display:flex;flex-direction:column;align-items:stretch;padding:6px;border-radius:22px}.bottom .tabs::before,.bottom .tabs .glass-lens{display:none!important}.bottom .tabs .tab,.bottom .tabs .library-upload-button{width:100%;min-width:0;max-width:none;height:54px;display:flex;align-items:center;justify-content:flex-start;gap:12px;padding:0 16px;border-radius:14px}.bottom #libraryTab,.bottom #collectionTab,.bottom #libraryUploadButton{width:100%;min-width:0;max-width:none;height:54px}.bottom .tabs .tab.active{background:#168cff24;color:#168cff}.bottom .tabs small,.bottom #libraryTab small{font-size:13px}.bottom>.search-button{position:static;width:100%;height:50px;border-radius:15px}.bottom>.scale{position:static;display:flex;flex:none;width:100%;border-radius:15px}.bottom .scale:not(.hidden){visibility:visible;opacity:1;transform:none;pointer-events:auto}.bottom>.scale button{padding:12px 4px}.selection-mode .bottom{transform:translateX(-100%)}#collectionScreen{left:216px}.collection-head,.section-title,.searchbox{margin-left:32px;margin-right:32px}.album-hero{max-height:560px}#collectionGrid[data-layout=mosaic]{grid-auto-rows:calc((100vw - 220px)/3)}.people-search-cards{grid-template-columns:repeat(auto-fill,minmax(135px,180px))}.people-search-results{padding-left:32px;padding-right:32px}.viewer-top,.toolbar{max-width:1100px;margin-left:auto;margin-right:auto}.viewer-bottom{max-width:1100px}.selection-toolbar{left:calc(50% + 108px)}
-}
-
 .people-merge-pair.people-merge-many{display:grid;grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:18px 12px;max-width:none;overflow:visible;align-items:start}.people-merge-pair.people-merge-many>div{min-width:0}.people-merge-sheet .people-page-body{padding-bottom:20px}.people-merge-dock{position:sticky;bottom:0;z-index:3;margin:18px -4px -8px;padding:12px 4px max(12px,env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--manage-page) 20%)}
 .library-timeline{position:fixed;right:5px;top:max(100px,env(safe-area-inset-top));bottom:calc(110px + env(safe-area-inset-bottom));z-index:12;color:var(--screen-fg,#f5f5f7);touch-action:none;user-select:none;animation:timeline-appear .22s ease-out}.timeline-track{position:relative;width:42px;height:100%;background:transparent}.timeline-ticks{position:absolute;inset:0;pointer-events:none}.timeline-ticks span{position:absolute;right:8px;display:block;width:8px;height:2px;border-radius:2px;background:currentColor;transform:translateY(-50%);opacity:.2;pointer-events:none}.timeline-thumb{position:absolute;right:8px;left:auto;width:30px;height:3px;border-radius:3px;background:currentColor;transform:translateY(-50%);box-shadow:0 0 8px #ffffff28;pointer-events:none}.timeline-date{position:absolute;right:54px;top:50%;transform:translateY(-50%);white-space:nowrap;padding:8px 12px;border-radius:14px;background:#242428d9;color:#fff;font-size:14px;font-weight:600;line-height:1.25;letter-spacing:-.2px;box-shadow:0 4px 18px #0002;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);pointer-events:none}@keyframes timeline-appear{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}@media(prefers-reduced-motion:reduce){.library-timeline{animation:none}}.people-merge-sheet .people-merge-dock{position:sticky;bottom:0}
 
@@ -679,3 +675,147 @@ html::-webkit-scrollbar,body::-webkit-scrollbar,#collectionScreen::-webkit-scrol
 .timeline-glass.is-closing{pointer-events:none;opacity:1;clip-path:circle(150vmax at 100% var(--timeline-origin,50%));animation:timeline-water-exit .62s cubic-bezier(.2,.65,.2,1) both}
 @keyframes timeline-water-exit{from{clip-path:circle(0 at 100% var(--timeline-origin,50%));opacity:.9}to{clip-path:circle(150vmax at 100% var(--timeline-origin,50%));opacity:0}}
 @media(prefers-reduced-motion:reduce){.tile.timeline-date-highlight::after,.timeline-glass.is-closing{animation:none}}
+
+/* ============================================================================
+   Desktop layout. The phone layout above stays exactly as it is; this block
+   only reshapes it into a two-pane manager:
+
+   - a real sidebar column instead of a floating card with dead space,
+   - a solid compact toolbar instead of a giant title floating over photos,
+   - grids and lists that use the width a desktop actually has,
+   - the viewer's controls docked below the photo instead of across it.
+   ============================================================================ */
+@media(min-width:1000px) and (pointer:fine){
+  :root{--lib-hdr:0px;--side:248px;--side-line:#8a8a8e33;--side-hover:#8a8a8e1f;--side-faint:#8a8a8e26}
+
+  html,body{background:var(--screen-bg)}
+  .app{max-width:none;width:calc(100% - var(--side));margin:0 0 0 var(--side);min-height:100vh;padding-bottom:40px}
+
+  /* --- Header: a solid toolbar, not a title floating over the photos --- */
+  .header{
+    position:sticky;top:0;z-index:8;
+    height:auto;min-height:64px;margin-bottom:0;padding:0 28px;
+    display:flex;align-items:center;
+    color:var(--screen-fg);background:var(--screen-bg);
+    backdrop-filter:none;-webkit-backdrop-filter:none;
+    mask-image:none;-webkit-mask-image:none;
+    border-bottom:1px solid var(--side-line);
+  }
+  .header .topline{width:100%}
+  .header,.header.light-header{color:var(--screen-fg)}
+  .header h1{font-size:23px;letter-spacing:-.03em;line-height:1.15}
+  .header .date{font-size:13px;font-weight:500;margin-top:3px;color:#89898f}
+  .header.light-header h1,.header.light-header .date{text-shadow:none}
+  .header .glass,.header.light-header .glass{background:var(--side-faint);border-color:var(--side-line);color:var(--screen-fg)}
+  .header .glass:hover{background:#8a8a8e3d}
+  .header .circle{height:42px;width:42px}
+  .header .select{height:42px;font-size:15px;padding:0 18px}
+  .header .icon{width:21px;height:21px}
+  .header .profile-avatar{width:38px;height:38px;font-size:17px;background:#8a8a8e33;border-color:#8a8a8e4d;color:var(--screen-fg)}
+  #library .grid{padding-top:12px}
+  #collectionSections{padding-top:12px}
+  .count{margin:20px 0 8px}
+
+  /* --- Sidebar: a real column, not a floating card --- */
+  .bottom{
+    position:fixed;left:0;top:0;bottom:0;transform:none;
+    width:var(--side);padding:20px 12px 16px;
+    display:flex;flex-direction:column;align-items:stretch;gap:4px;
+    background:var(--screen-bg);border-right:1px solid var(--side-line);z-index:9;
+  }
+  .bottom::before{
+    content:"lumi";display:block;padding:2px 12px 18px;
+    font-size:21px;font-weight:700;letter-spacing:-.045em;color:var(--screen-fg);
+  }
+  .bottom>.tabs{
+    max-width:none;width:100%;display:flex;flex-direction:column;align-items:stretch;gap:2px;
+    padding:0;border-radius:0;background:none;border:0;box-shadow:none;
+    backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+  html[data-theme=dark] .bottom>.tabs{background:none;border:0;box-shadow:none}
+  .bottom .tabs::before,.bottom .tabs .glass-lens{display:none!important}
+  .bottom .tabs .tab,.bottom .tabs .library-upload-button{
+    width:100%;min-width:0;max-width:none;height:44px;
+    display:flex;align-items:center;justify-content:flex-start;gap:11px;
+    padding:0 12px;border-radius:11px;color:var(--screen-fg);font-weight:500;
+  }
+  .bottom .tabs .tab .icon{width:21px;height:21px}
+  .bottom #libraryTab,.bottom #collectionTab,.bottom #libraryUploadButton{width:100%;min-width:0;max-width:none;height:44px;overflow:visible}
+  .bottom .tabs small,.bottom #libraryTab small{font-size:14px;font-weight:500;opacity:1}
+  .bottom .tabs .tab:hover{background:var(--side-hover)}
+  .bottom .tabs .tab.active{background:#168cff26;color:#168cff}
+  .bottom .tabs .library-upload-button{position:relative;margin-top:12px;color:#168cff}
+  .bottom .tabs .library-upload-button::before{
+    content:"";position:absolute;left:12px;right:12px;top:-7px;height:1px;background:var(--side-line);
+  }
+
+  /* --- Density switcher: plain buttons, the drag-pill is a phone gesture --- */
+  .bottom>.scale{
+    position:static;display:flex;flex:none;width:100%;margin-top:16px;
+    padding:4px;gap:2px;border-radius:11px;
+    background:#8a8a8e1f;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+  html[data-theme=dark] .bottom>.scale{background:#ffffff14}
+  .bottom .scale::before{display:none!important}
+  .bottom .scale:not(.hidden){visibility:visible;opacity:1;transform:none;pointer-events:auto}
+  .bottom .scale button{flex:1;padding:8px 4px;border-radius:8px;font-size:13px;color:#6e6e75}
+  .bottom .scale button.active{background:#fffffff2;color:#111;box-shadow:0 1px 2px #0000001f}
+  html[data-theme=dark] .bottom .scale button{color:#a8a8ae}
+  html[data-theme=dark] .bottom .scale button.active{background:#5c5c63;color:#fff}
+
+  /* --- Search: a row at the bottom of the column --- */
+  .bottom>.search-button{
+    position:static;width:100%;height:44px;margin-top:auto;
+    display:flex;align-items:center;justify-content:flex-start;gap:11px;
+    padding:0 12px;border-radius:11px;color:var(--screen-fg);
+    background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+  .bottom>.search-button::after{content:"Поиск";font-size:14px;font-weight:500}
+  .bottom>.search-button:hover{background:var(--side-hover)}
+
+  /* Scrolling the library must not collapse the sidebar on a desktop. */
+  .bottom.browsing #collectionTab{width:100%;min-width:0;max-width:none;opacity:1;padding:0 12px;pointer-events:auto}
+  .bottom.browsing #libraryTab{width:100%;min-width:0;max-width:none;height:44px}
+  .bottom.browsing #libraryTab small{opacity:1;font-size:14px;line-height:normal}
+  .bottom.browsing #libraryTab>.icon,.bottom.browsing #libraryTab>span{transform:none}
+  .bottom.browsing .library-upload-button{width:100%;min-width:0;max-width:none;padding:0 12px;opacity:1;pointer-events:auto}
+  .bottom.browsing .tabs{border-radius:0}
+  .bottom.browsing .tabs::before{width:auto!important;transform:none!important}
+
+  .selection-toolbar{left:calc(50% + var(--side)/2)}
+
+  /* --- Collections: use the width instead of stretching three columns --- */
+  #collections{max-width:1340px}
+  .collection-group{margin-bottom:26px}
+  .collection-group>h2{margin:0 28px 12px;font-size:20px}
+  .collection-group>h2 button{justify-content:flex-start;gap:10px}
+  .section-chevron{width:24px;height:24px}
+  .albums{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:20px;padding:0 28px 30px}
+  .utility-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:0 28px}
+  .section-title{margin-left:28px;margin-right:28px}
+
+  /* --- Search: the phone offset of the field does not belong here --- */
+  #searchScreen{padding-top:12px}
+  .searchbox{position:static;top:auto;max-width:620px;margin:0 28px;height:50px;padding:0 16px}
+  .searchbox+.section-title,#searchScreen .searchbox~.section-title{padding-top:0;margin-top:34px;margin-bottom:16px}
+  .search-grid{padding:0 28px;gap:6px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+
+  /* --- Album view: the panel starts next to the sidebar --- */
+  #collectionScreen{left:var(--side);padding-bottom:40px}
+  #collectionGrid[data-layout=mosaic]{grid-auto-rows:calc((100vw - var(--side) - 60px)/3)}
+  #collectionScreen .collection-head,#collectionScreen .section-title{margin-left:28px;margin-right:28px}
+
+  /* --- Viewer: controls dock under the photo, they no longer cross it --- */
+  .viewer-bottom{
+    position:static;width:100%;max-width:none;
+    background:var(--screen-bg);border-top:1px solid var(--side-line);
+    padding:12px 28px 16px;opacity:1;
+  }
+  html[data-theme=dark] .viewer-bottom{background:#000}
+  .filmstrip{height:56px;max-width:1040px;margin:0 auto 12px}
+  .filmstrip button{width:38px;height:54px}
+  .filmstrip img{width:38px;height:54px}
+  html[data-theme=dark] .filmstrip .active img{outline-color:#f5f5f7}
+  .viewer-top{max-width:1040px;margin-left:auto;margin-right:auto}
+  .toolbar{max-width:620px;margin-left:auto;margin-right:auto}
+}

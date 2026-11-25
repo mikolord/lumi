@@ -27,9 +27,10 @@ class UpdateTests(unittest.TestCase):
             with tarfile.open(fileobj=output,mode='w:gz') as tar:
                 for path in files:tar.add(path,arcname=path.relative_to(ROOT).as_posix())
             archive=output.getvalue()
-        manifest=dict(version='v0.75.7',runtime=1,requirementsSha256=hashlib.sha256((ROOT/'requirements.txt').read_bytes().replace(b'\r\n',b'\n')).hexdigest(),sha256=sha or hashlib.sha256(archive).hexdigest())
-        assets={'mira-photos-manifest.json':'https://api.github.com/repos/fixture/releases/assets/1','mira-photos-v0.75.7.tar.gz':'https://api.github.com/repos/fixture/releases/assets/2'}
-        release=dict(tag_name='v0.75.7',assets=[dict(name=k,url=v) for k,v in assets.items()])
+        version=(ROOT/'VERSION').read_text().strip()
+        manifest=dict(version='v'+version,runtime=1,requirementsSha256=hashlib.sha256((ROOT/'requirements.txt').read_bytes().replace(b'\r\n',b'\n')).hexdigest(),sha256=sha or hashlib.sha256(archive).hexdigest())
+        assets={'mira-photos-manifest.json':'https://api.github.com/repos/fixture/releases/assets/1','mira-photos-v'+version+'.tar.gz':'https://api.github.com/repos/fixture/releases/assets/2'}
+        release=dict(tag_name='v'+version,assets=[dict(name=k,url=v) for k,v in assets.items()])
         return lambda url,limit: json.dumps(release).encode() if url.endswith('/latest') else json.dumps(manifest).encode() if url.endswith('/1') else archive
 
     def test_check_download_validate_install_and_manual_rollback(self):
