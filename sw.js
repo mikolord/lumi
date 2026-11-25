@@ -1,6 +1,6 @@
-importScripts('./thumbnail-cache.js?v=95');
-const CACHE='photo-design-v95';
-const CORE=['./','./index.html','./style.css?v=95','./app.js?v=95','./context-menu.js?v=95','./collections-ui.js?v=95','./boot.js?v=95','./account-client.js?v=95','./manage.js?v=95','./media-editor.js?v=95','./upload-queue.js?v=95','./vault-client.js?v=95','./trash-album.js?v=95','./system-ui.js?v=95','./people-ui.js?v=95','./jsQR.js?v=95','./album-ui.js?v=95','./timeline-ui.js?v=95','./thumbnail-cache.js?v=95','./sheet-gestures.js?v=95','./avatar-crop.js?v=95','./metadata.js?v=95','./manifest.webmanifest','./icons/lumi-180.png','./icons/lumi-192.png','./icons/lumi-512.png'];
+importScripts('./thumbnail-cache.js?v=96');
+const CACHE='photo-design-v96';
+const CORE=['./','./index.html','./style.css?v=96','./app.js?v=96','./context-menu.js?v=96','./collections-ui.js?v=96','./boot.js?v=96','./account-client.js?v=96','./manage.js?v=96','./media-editor.js?v=96','./upload-queue.js?v=96','./vault-client.js?v=96','./trash-album.js?v=96','./system-ui.js?v=96','./people-ui.js?v=96','./jsQR.js?v=96','./album-ui.js?v=96','./timeline-ui.js?v=96','./thumbnail-cache.js?v=96','./sheet-gestures.js?v=96','./avatar-crop.js?v=96','./metadata.js?v=96','./manifest.webmanifest','./icons/lumi-180.png','./icons/lumi-192.png','./icons/lumi-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('photo-design-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('message',event=>{if(event.data?.type==='lumi-thumbnail-window'&&event.source?.id)updateThumbnailWindow(event.source.id,event.data.indices,event.data.visible);});

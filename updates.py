@@ -86,6 +86,17 @@ class Updates:
 
     def current(self):return (self.root/'VERSION').read_text().strip()
 
+    def phase_for(self,tag,previous=None):
+        """Keep an already staged package installable.
+
+        A re-check must not throw away a package that was downloaded and
+        verified for the same tag: the install step would become unreachable
+        because the download button hides itself once the tag is downloaded.
+        """
+        state=previous if previous is not None else read_json(self.path)
+        if state.get('phase')=='ready' and state.get('downloaded')==tag:return {'phase':'ready'}
+        return {'phase':'idle'}
+
     def git(self,args,cwd=None,timeout=90):
         import shlex
         key=self.home/'github_ed25519';hosts=self.home/'github_known_hosts'
@@ -103,13 +114,14 @@ class Updates:
         return dict(current=self.current(),repo=os.environ.get('PHOTO_UPDATE_REPO','mikolord/lumi'),latest=tag.removeprefix('v') if tag else None,newer=bool(tag and version(tag)>version(self.current())),phase=state.get('phase','idle'),message=state.get('message',''),checked=state.get('checked'),downloaded=state.get('downloaded'),canInstall=os.environ.get('PHOTO_UPDATE_LAUNCHER')=='1',canRollback=bool(activation.get('previous') is not None and activation.get('active')!=activation.get('previous')),rollbackMessage=activation.get('error',''))
 
     def check(self):
+        previous=read_json(self.path)
         self.save(phase='checking',message='Проверяем выпуски…')
         repo=self.source()
         if (self.home/'github_ed25519').is_file():
             rows=self.git(['ls-remote','--tags','--refs','ssh://git@ssh.github.com:443/'+repo+'.git']).decode().splitlines()
             tags=[(name.removeprefix('refs/tags/'),commit) for row in rows if len(row.split())==2 for commit,name in [row.split()] if TAG.fullmatch(name.removeprefix('refs/tags/'))]
             if not tags:raise VaultError('Стабильных выпусков пока нет.')
-            tag,commit=max(tags,key=lambda item:version(item[0]));self.save(phase='idle',tag=tag,commit=commit,transport='ssh',checked=int(time.time()),message='Доступно обновление' if version(tag)>version(self.current()) else 'Установлена последняя версия');return
+            tag,commit=max(tags,key=lambda item:version(item[0]));self.save(**self.phase_for(tag,previous),tag=tag,commit=commit,transport='ssh',checked=int(time.time()),message='Доступно обновление' if version(tag)>version(self.current()) else 'Установлена последняя версия');return
         try:release=json.loads(download('https://api.github.com/repos/'+repo+'/releases/latest',1024**2))
         except urllib.error.HTTPError as error:
             code=error.code;error.close()
@@ -118,7 +130,7 @@ class Updates:
         tag=release.get('tag_name','')
         if not TAG.fullmatch(tag) or release.get('draft') or release.get('prerelease'):raise VaultError('Подходящий стабильный выпуск не найден.',502)
         assets={a.get('name'):a.get('url') for a in release.get('assets',[])}
-        self.save(phase='idle',tag=tag,assets=assets,transport='https',checked=int(time.time()),message='Доступно обновление' if version(tag)>version(self.current()) else 'Установлена последняя версия')
+        self.save(**self.phase_for(tag,previous),tag=tag,assets=assets,transport='https',checked=int(time.time()),message='Доступно обновление' if version(tag)>version(self.current()) else 'Установлена последняя версия')
 
     def stage(self):
         state=read_json(self.path);tag=state.get('tag','')
@@ -174,7 +186,9 @@ class Updates:
         with activation_lock(self.home):
             state=read_json(self.path);active=read_json(self.home/'active.json');old=active.get('active','factory')
             slot=active.get('previous') if rollback else state.get('slot')
-            if not isinstance(slot,str) or (not rollback and (state.get('phase')!='ready' or state.get('downloaded')!=state.get('tag'))):raise VaultError('Нет подготовленного обновления.',409)
+            tag=state.get('tag','')
+            staged=state.get('downloaded')==tag and isinstance(state.get('slot'),str) and (self.home/'releases'/state['slot']/'VERSION').is_file() and bool(tag) and version(tag)>version(self.current())
+            if not isinstance(slot,str) or (not rollback and not staged):raise VaultError('Нет подготовленного обновления.',409)
             if slot!='factory' and (not re.fullmatch(r'v\d+\.\d+\.\d+-[a-f0-9]{12}',slot) or not (self.home/'releases'/slot/'server.py').is_file()):raise VaultError('Пакет недоступен.',409)
             write_json(self.home/'active.json',dict(active=slot,previous=old,pending=True,error=''))
             self.save(phase='installing',message='Перезапускаем приложение…')

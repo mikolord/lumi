@@ -13,7 +13,7 @@
     sheet.querySelector('#systemUpdateStatus').textContent=data.rollbackMessage||data.message||'Проверь наличие новой версии';
     const running=['checking','downloading','installing'].includes(data.phase);
     sheet.querySelector('#checkUpdates').disabled=busy||running;
-    const download=sheet.querySelector('#downloadUpdate');download.classList.toggle('hidden',!data.newer||data.downloaded===('v'+data.latest));download.disabled=busy||running;
+    const download=sheet.querySelector('#downloadUpdate');download.classList.toggle('hidden',!data.newer||(data.downloaded===('v'+data.latest)&&data.phase==='ready'));download.disabled=busy||running;
     const install=sheet.querySelector('#installUpdate');install.classList.toggle('hidden',!data.newer||!data.canInstall||data.phase!=='ready');install.disabled=busy||running;
     const rollback=sheet.querySelector('#rollbackUpdate');rollback.classList.toggle('hidden',!data.canRollback);rollback.disabled=busy||running;
     sheet.querySelector('.system-update-loading').classList.toggle('hidden',!running);

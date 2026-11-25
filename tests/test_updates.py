@@ -45,6 +45,17 @@ class UpdateTests(unittest.TestCase):
             self.assertTrue(u.info()['canRollback']);u.install(lambda:None,rollback=True)
             self.assertEqual(read_json(u.home/'active.json')['active'],'factory')
 
+    def test_recheck_keeps_staged_package_installable(self):
+        u=self.updater
+        with patch('updates.download',side_effect=self.fixture()):u.check();u.stage()
+        self.assertEqual(u.info()['phase'],'ready')
+        with patch('updates.download',side_effect=self.fixture()):u.check()
+        self.assertEqual(u.info()['phase'],'ready')
+        self.assertTrue(u.info()['newer'])
+        with patch.dict('os.environ',{'PHOTO_UPDATE_LAUNCHER':'1'}),patch('updates.threading.Timer') as timer:
+            u.install(lambda:None);timer.assert_called_once()
+        self.assertEqual(read_json(u.home/'active.json')['active'],read_json(u.path)['slot'])
+
     def test_corruption_path_traversal_symlinks_and_incompatible_runtime(self):
         u=self.updater
         with patch('updates.download',side_effect=self.fixture(sha='a'*64)):
