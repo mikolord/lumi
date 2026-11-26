@@ -818,4 +818,29 @@ html::-webkit-scrollbar,body::-webkit-scrollbar,#collectionScreen::-webkit-scrol
   html[data-theme=dark] .filmstrip .active img{outline-color:#f5f5f7}
   .viewer-top{max-width:1040px;margin-left:auto;margin-right:auto}
   .toolbar{max-width:620px;margin-left:auto;margin-right:auto}
+
+  /* --- Selection: the desktop keeps the desktop conventions --- */
+  .header.is-selecting #selectAll{display:inline-flex!important}
+  .header.is-selecting #select{width:42px;height:42px;padding:0;border-radius:50%;display:grid;place-items:center}
+  .header.is-selecting #select .icon{width:20px;height:20px}
+  .header.is-selecting h1{font-size:23px}
+  .header.is-selecting .date{font-size:13px}
+  .header.is-selecting #selectionMore{height:42px;width:42px}
+
+  /* --- Timeline: a visible handle on the right edge of the library --- */
+  .library-timeline-trigger{
+    left:auto;right:14px;top:50%;transform:translateY(-50%);
+    width:34px;height:104px;padding:0;border-radius:17px;
+    border:1px solid #ffffff33;background:#14141866;color:#fff;
+    opacity:1;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 20px #0000003d;backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);
+  }
+  .library-timeline-trigger:before{display:none}
+  .library-timeline-trigger .library-timeline-handle{display:block;width:19px;height:19px;flex:none;background:none;border-radius:0;opacity:1}
+  .library-timeline-handle svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .library-timeline-trigger:hover{background:#1414188c;border-color:#ffffff59}
+  .library-timeline{right:14px;top:96px;bottom:28px}
+
+  /* The navigation column stays put while the photos are selected. */
+  .selection-mode .bottom,.selection-mode .bottom>*{opacity:1;visibility:visible;pointer-events:auto;transform:none}
 }
