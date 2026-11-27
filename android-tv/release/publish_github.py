@@ -21,7 +21,7 @@ def main():
     parser.add_argument('--source-commit', required=True)
     parser.add_argument('--prerelease', action='store_true', help='Publish a beta APK without changing the stable update feed')
     args = parser.parse_args()
-    info = json.loads((ROOT / 'release/tv/version.json').read_text())
+    info = json.loads((ROOT / 'release/tv/version.json').read_text(encoding='utf-8-sig'))
     apk = ROOT / 'release/tv/rc-foto.apk'
     data = apk.read_bytes()
     if hashlib.sha256(data).hexdigest() != info['sha256']: raise ValueError('APK checksum mismatch')

@@ -7,6 +7,7 @@
 | Платформа | Установка |
 | --- | --- |
 | Сервер | Docker Compose — инструкция ниже |
+| Android: телефон / планшет / ТВ | [Скачать универсальный APK 0.8.0-beta1](https://github.com/mikolord/lumi/releases/download/android-v0.8.0-beta1/lumi-android-0.8.0-beta1.apk) — тестовая версия |
 | Android TV / Huawei Vision S | [Скачать APK 0.7.4](https://github.com/mikolord/lumi/releases/download/tv-v0.7.4/lumi-tv-0.7.4.apk) |
 | Телефон / компьютер | Открой свой сервер в браузере; можно установить как PWA |
 | iOS | Отдельное приложение готовится. Пока доступна PWA через Safari |
@@ -71,3 +72,5 @@ docker compose up -d --build
 Сервер: Python 3.12, `requirements.txt`. Для сборки ТВ нужны JDK 21, Android SDK 35 и исходный ключ подписи для совместимого обновления существующих установок. Ключи, `.env`, пользовательские файлы и кэш не входят в репозиторий.
 
 Серверный пакет: `python scripts/build_release.py`. ТВ: `android-tv/build.ps1`. Инструкция выпуска клиента находится в [`android-tv/README.md`](android-tv/README.md).
+
+Общий порядок публикации сервера и APK: [RELEASING.md](RELEASING.md). Серверный выпуск автоматически прикладывает опубликованный APK; тестовая версия Android отмечается как бета.

@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import sys
 import urllib.request
 import urllib.error
 
@@ -45,5 +46,8 @@ def main():
             continue
         api(upload + '?name=' + path.name, data, content_type)
     print('Published:', release['html_url'])
+    # Share one download page while preserving independent Android/server versions.
+    subprocess.run([sys.executable, str(ROOT / 'scripts/sync_android_release.py'),
+                    '--server-tag', tag], check=True)
 
 if __name__ == '__main__': main()
