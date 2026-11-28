@@ -381,12 +381,13 @@
     e.preventDefault();
     const index = Number(tile.dataset.index);
     // Ctrl+right-click acts on the whole selection, Shift+right-click takes the range first.
-    if (e.shiftKey && selectionAnchor !== null) { selectRangeTo(index); openSelectionMenu(); return; }
+    if (e.shiftKey) { selectRangeTo(index, e.ctrlKey || e.metaKey); openSelectionMenu(); return; }
     if (e.ctrlKey || e.metaKey) {
-      if (!selecting) { enterSelectionMode(); chosen.add(index); selectionAnchor = index; updateSelectionUI(); }
+      if (!selecting) { enterSelectionMode(); selectOnly(index); }
       else if (!chosen.has(index)) toggleChosen(index);
       openSelectionMenu(); return;
     }
+    if (selecting && !busy && viewer.classList.contains('hidden')) { if (!chosen.has(index)) selectOnly(index); openSelectionMenu(); return; }
     if (!selecting && !busy && viewer.classList.contains('hidden')) openMenu(tile);
   });
   document.addEventListener('keydown', e => {

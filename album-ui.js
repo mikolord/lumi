@@ -44,6 +44,14 @@
     hero.querySelector('h2').textContent=title;hero.querySelector('p').textContent=`${items.length} объектов`;selectionChanged();if(selecting)updateSelectionUI();window.PhotoTimeline?.refresh();
   }
   function render(){if(!normal())return;const scroll=album.scrollTop,items=getCollectionItems(collectionName),current=[...grid.children].map(tile=>Number(tile.dataset.index));if(items.length!==current.length||items.some((id,i)=>id!==current[i]))grid.replaceChildren(...items.map(makeTile));refresh();album.scrollTop=scroll;}
+  function changeDensity(direction){
+    if(!normal()||!desktopMedia.matches)return false;
+    const layouts=['dense','square','mosaic'],index=layouts.indexOf(config(collectionName).layout),next=layouts[Math.max(0,Math.min(layouts.length-1,index+direction))];
+    if(next===layouts[index])return true;
+    const top=album.getBoundingClientRect().top,anchor=[...grid.children].find(tile=>tile.getBoundingClientRect().bottom>top),before=anchor?.getBoundingClientRect().top;
+    save({layout:next});if(anchor&&Number.isFinite(before))album.scrollTop+=anchor.getBoundingClientRect().top-before;
+    return true;
+  }
   function screenChanged(which){
     closePopup();if(which==='collectionScreen'&&collectionName!=='Недавно удалённые'){
       for(const {element} of homes)navigation.append(element);navigation.classList.remove('hidden');options.classList.add('hidden');select.classList.remove('hidden');filter.classList.add('hidden');
@@ -62,5 +70,5 @@
   album.addEventListener('scroll',closePopup,{passive:true});window.addEventListener('resize',closePopup);
   window.addEventListener('keydown',e=>{if(!popupAnchor)return;if(e.key==='Escape'){const anchor=popupAnchor;closePopup();anchor.focus({preventScroll:true});e.preventDefault();e.stopImmediatePropagation();}else if(['ArrowDown','ArrowUp','Tab'].includes(e.key)){const buttons=[...popup.querySelectorAll('button')],index=buttons.indexOf(document.activeElement),back=e.key==='ArrowUp'||e.key==='Tab'&&e.shiftKey;buttons[(index+(back?-1:1)+buttons.length)%buttons.length]?.focus();e.preventDefault();e.stopImmediatePropagation();}},true);
   document.addEventListener('vault-state-change',()=>{if(normal())render();});
-  window.PhotoAlbums={order,refresh,selectionChanged,screenChanged,locked(){window.PhotoTimeline?.reset();if(selecting)select.click();navigation.classList.add('hidden');hero.classList.add('hidden');hero.querySelector('img').removeAttribute('src');heroIndex=null;album.classList.remove('album-has-hero');},opened(){screenChanged(screen);refresh();}};
+  window.PhotoAlbums={order,refresh,selectionChanged,screenChanged,changeDensity,locked(){window.PhotoTimeline?.reset();if(selecting)select.click();navigation.classList.add('hidden');hero.classList.add('hidden');hero.querySelector('img').removeAttribute('src');heroIndex=null;album.classList.remove('album-has-hero');},opened(){screenChanged(screen);refresh();}};
 })();

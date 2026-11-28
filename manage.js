@@ -154,7 +154,7 @@
     sheet.querySelector('#pairManual').onsubmit=e=>{e.preventDefault();process(new FormData(e.target).get('qr'));};
     try{
       if(!navigator.mediaDevices?.getUserMedia)throw Error('Камера недоступна. Вставь содержимое QR-кода вручную.');
-      if(!window.jsQR)await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='jsQR.js?v=97';script.onload=resolve;script.onerror=reject;document.body.append(script);});
+      if(!window.jsQR)await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='jsQR.js?v=98';script.onload=resolve;script.onerror=reject;document.body.append(script);});
       if(sheet.dataset.view!=='pair-scan'||pageRevision!==scanRevision)return;
       const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});if(sheet.dataset.view!=='pair-scan'||pageRevision!==scanRevision){stream.getTracks().forEach(t=>t.stop());return;}cameraStream=stream;const video=sheet.querySelector('#pairVideo');video.srcObject=stream;await video.play();sheet.querySelector('#pairStatus').textContent='Наведите камеру на QR-код';const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d',{willReadFrequently:true});
       const tick=()=>{if(!cameraStream||sheet.dataset.view!=='pair-scan')return;if(video.videoWidth){canvas.width=video.videoWidth;canvas.height=video.videoHeight;ctx.drawImage(video,0,0);const pixels=ctx.getImageData(0,0,canvas.width,canvas.height),found=window.jsQR(pixels.data,canvas.width,canvas.height);if(found?.data?.trim()){stopCamera();process(found.data);return;}}scanFrame=requestAnimationFrame(tick);};scanFrame=requestAnimationFrame(tick);

@@ -9,6 +9,9 @@ w.HTMLElement.prototype.animate=()=>({finished:Promise.resolve(),cancel(){}});
 w.HTMLMediaElement.prototype.pause=()=>{};w.HTMLMediaElement.prototype.load=()=>{};
 w.Image=class{set src(value){}};
 const style=d.createElement('style');style.textContent=fs.readFileSync(path.join(root,'style.css'),'utf8');d.head.append(style);
+// jsdom does not evaluate the real viewport/pointer media environment. Pin this
+// phone-only test to mobile rules; desktop-browser.cjs checks both in real WebKit.
+for(let i=style.sheet.cssRules.length-1;i>=0;i--){const rule=style.sheet.cssRules[i];if(rule.type===4&&/min-width:\s*1000px/.test(rule.conditionText)&&/pointer:\s*fine/.test(rule.conditionText))style.sheet.deleteRule(i);}
 run(fs.readFileSync(path.join(root,'app.js'),'utf8'));
 const viewer=d.querySelector('#viewer'),wrap=d.querySelector('#photoWrap');
 function surface(){const css=w.getComputedStyle(wrap);return {top:css.top,bottom:css.bottom,height:css.height,transition:css.transition};}
