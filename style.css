@@ -799,19 +799,27 @@ html::-webkit-scrollbar,body::-webkit-scrollbar,#collectionScreen::-webkit-scrol
   .searchbox{position:static;top:auto;max-width:620px;margin:0 28px;height:50px;padding:0 16px}
   .searchbox+.section-title,#searchScreen .searchbox~.section-title{padding-top:0;margin-top:34px;margin-bottom:16px}
   .search-grid{padding:0 28px;gap:6px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  #searchScreen .people-search-results,
+  #searchScreen .searchbox:has(+ .people-search-results:not(.hidden))+.people-search-results{padding:24px 28px 10px}
+  #searchScreen .empty:not(.hidden){padding:32px 28px}
 
   /* --- Album view: the panel starts next to the sidebar --- */
   #collectionScreen{left:var(--side);padding-bottom:40px}
   #collectionGrid[data-layout=mosaic]{grid-auto-rows:calc((100vw - var(--side) - 60px)/3)}
   #collectionScreen .collection-head,#collectionScreen .section-title{margin-left:28px;margin-right:28px}
+  #collectionGrid[data-layout=square]{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+  #collectionGrid[data-layout=dense]{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+  #collectionScreen .album-navigation.album-selecting #selectAll{display:inline-flex!important}
 
   /* --- Viewer: controls dock under the photo, they no longer cross it --- */
   .viewer-bottom{
-    position:static;width:100%;max-width:none;
+    position:absolute;width:100%;max-width:none;
     background:var(--screen-bg);border-top:1px solid var(--side-line);
     padding:12px 28px 16px;opacity:1;
   }
   html[data-theme=dark] .viewer-bottom{background:#000}
+  /* Reserve the dock's actual height; specificity matches the shared mobile surface. */
+  .viewer .photo-wrap,.viewer.cinema .photo-wrap{bottom:var(--media-bottom)}
   .filmstrip{height:56px;max-width:1040px;margin:0 auto 12px}
   .filmstrip button{width:38px;height:54px}
   .filmstrip img{width:38px;height:54px}

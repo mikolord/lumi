@@ -70,6 +70,31 @@ function event(target, type, properties = {}) {
   assert(!menu().classList.contains('hidden'), 'Shift+right-click opens the menu');
   event(doc, 'keydown', { key: 'Escape' }); await wait();
 
+  await new Promise(resolve=>setTimeout(resolve,420));
+  event(tile(2), 'click');
+  event(tile(8), 'click', { shiftKey: true });
+  event(tile(5), 'click', { shiftKey: true });
+  assert.deepEqual(Array.from(evaluate('[...chosen]')), [2,3,4,5], 'Shift can shrink its previous range');
+  event(tile(10), 'click', { ctrlKey: true });
+  event(tile(12), 'click', { ctrlKey: true, shiftKey: true });
+  event(tile(11), 'click', { ctrlKey: true, shiftKey: true });
+  assert.deepEqual(Array.from(evaluate('[...chosen]')).sort((a,b)=>a-b), [2,3,4,5,10,11], 'Ctrl+Shift preserves earlier selections while shrinking its range');
+  doc.querySelector('#select').click();
+  assert.equal(evaluate('selectionAnchor'), null, 'Cancel clears the old range anchor');
+  event(tile(6), 'contextmenu', { shiftKey: true }); await wait();
+  assert(evaluate('selecting'), 'Shift+right-click starts a fresh selection after cancel');
+  assert.equal(evaluate('chosen.size'), 1);
+  assert(!menu().classList.contains('hidden'), 'A fresh Shift+right-click opens its menu');
+  event(doc, 'keydown', { key: 'Escape' }); await wait();
+  event(tile(7), 'contextmenu'); await wait();
+  assert(!menu().classList.contains('hidden'), 'Plain right-click works during selection');
+  assert.deepEqual(Array.from(evaluate('[...chosen]')), [7]);
+  event(doc, 'keydown', { key: 'Escape' }); await wait();
+  doc.querySelector('.app').inert=true;
+  event(doc,'keydown',{key:'a',ctrlKey:true});
+  assert.equal(evaluate('chosen.size'),1,'A modal prevents Ctrl+A from selecting the background grid');
+  doc.querySelector('.app').inert=false;
+
   // Ctrl+wheel changes the icon size.
   assert.equal(evaluate('size'), 'month');
   event(doc.querySelector('#grid'), 'wheel', { ctrlKey: true, deltaY: -120 });
